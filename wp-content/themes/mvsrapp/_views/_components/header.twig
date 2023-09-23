@@ -1,65 +1,23 @@
-<header class="pt-10 lg:pt-0">
+<header class="relative">
 
-	<div class="hidden bg-primary top-bar lg:block">
-
-		<div class="container">
-
-			<nav id="menu-secondary" class="container hidden menu lg:block" aria-labelledby="secondary-navigation">
-				<span class="sr-only" id="secondary-navigation">Secondary Navigation</span>
-				<ul class="flex flex-wrap justify-center w-full menu-secondary">
-					{% for item in secondaryMenu.items %}
-						<li class="{{item.class}} {{ item.current ? 'current-menu-item' }}">
-							<a href="{{item.link}}">{{item.name}}</a>
-							{% if item.children %}
-								<ul class="sub-menu">
-									{% for child in item.children %}
-										<li class="{{child.class}}">
-											<a href="{{child.link}}">{{child.name}}</a>
-										</li>
-									{% endfor %}
-								</ul>
-							{% endif %}
-						</li>
-					{% endfor %}
-				</ul>
-			</nav>
-
-		</div>
-
-	</div>
-
-	<div class="container flex-wrap items-center justify-between lg:py-4 lg:flex">
-
-		<a aria-label="Go to homepage" class="block lg:inline-block" href="{{site.site_url}}">
-			<img class="mx-auto max-w-40" src="{{options.site_logo.url}}" alt="{{site.title}} Logo"/>
+	<div class="hero mx-auto w-full flex relative mt-16 md:mt-10 lg:mt-16 xl:mt-20 mb-12 sm:mb-16 xl:mb-28 2xl:mb-32" role="banner">
+		<picture class="hero__messi absolute bottom-0 left-0">
+			<source srcset="https://www.messivsronaldo.app/static/messi-19cf2d39858818ff945cdc071a0b59bd.png" media="(min-width: 1024px)">
+			<source srcset="https://www.messivsronaldo.app/static/messi-sm-28c09022bf0ac628781e7d9e990099ac.png" media="(min-width: 600px)">
+			<img src="https://www.messivsronaldo.app/static/messi-xs-40c0793cb8cac5482573063d25330448.png" alt="">
+		</picture>
+			
+		<picture class="hero__ronaldo absolute bottom-0 right-0">
+			<source srcset="https://www.messivsronaldo.app/static/ronaldo-b56ea019adabf21fc2c48d164a187cef.png" media="(min-width: 1024px)">
+			<source srcset="https://www.messivsronaldo.app/static/ronaldo-sm-8c3ad805cec98941bbcc8748501ca20b.png" media="(min-width: 600px)">
+			<img src="https://www.messivsronaldo.app/static/ronaldo-xs-340bf718cb9837248d3d1f52ba6e5e5b.png" alt="">
+		</picture>
+		
+		<a aria-current="page" class="logo inline-block mx-auto font-black text-3xl leading-none uppercase" href="/">
+			<span class="logo__messi-vs block relative z-10">Messi Vs </span>
+			<span class="logo__ronaldo block relative z-10">Ronaldo</span>
+			<span class="logo__app block relative z-10 font-semibold mt-1 normal-case text-right opacity-25">.app</span>
 		</a>
-
-		{% include "_components/phone-top-right.twig" %}
-
-	</div>
-
-	<div class="hidden bg-secondary lg:block">
-
-		<nav id="menu-primary" class="container menu" aria-labelledby="primary-navigation">
-			<span class="sr-only" id="primary-navigation">Primary Navigation</span>
-			<ul class="flex flex-wrap justify-center w-full menu-primary">
-				{% for item in primaryMenu.items %}
-					<li class="{{item.class}} {{ item.current ? 'current-menu-item' }}">
-						<a href="{{item.link}}">{{item.name}}</a>
-						{% if item.children %}
-							<ul class="sub-menu">
-								{% for child in item.children %}
-									<li class="{{child.class}}">
-										<a href="{{child.link}}">{{child.name}}</a>
-									</li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-					</li>
-				{% endfor %}
-			</ul>
-		</nav>
-
 	</div>
 
 </header>

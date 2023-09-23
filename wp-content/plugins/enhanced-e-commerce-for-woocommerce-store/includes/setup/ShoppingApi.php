@@ -190,19 +190,7 @@ class ShoppingApi {
             $response_code = wp_remote_retrieve_response_code($request);
             $response_message = wp_remote_retrieve_response_message($request);
             $result = json_decode(wp_remote_retrieve_body($request));
-            $return = new \stdClass();
-            if ((isset($result->error) && $result->error == '')) {
-              $return->data = $result->data;
-              $return->data->graph_type = "day";
-              $return->error = false;
-              return $return;
-            }else{
-              $return->error = true;
-              $return->errors = $result->errors;
-              $return->status = $response_code;
-              return $return;
-            }
-            
+            return $result;
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -354,6 +342,51 @@ class ShoppingApi {
             if ((isset($result->error) && $result->error == '')) {
                 $return->data = $result->data;
                 //$return->data->graph_type = isset($data['graph_type'])?$data['graph_type']:"";
+                $return->error = false;
+                return $return;
+            } else {
+                $return->error = true;
+                $return->data = $result->data;
+                $return->errors = $result->errors;
+                $return->status = $response_code;
+                return $return;
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function ecommerce_checkout_funnel($from_date = '', $to_date = '', $domain = '')
+    {
+        try {
+            $url = $this->apiDomain . '/actionable-dashboard/ecomm-checkout-funnel-ga4';
+            //$url = 'http://127.0.0.1:8000/api/actionable-dashboard/ecomm-checkout-funnel-ga4';
+            $data = [
+                'start_date' => sanitize_text_field($from_date),
+                'end_date' => sanitize_text_field($to_date),
+                'subscription_id' => sanitize_text_field($this->subscriptionId),
+                'domain' => $domain
+            ];
+            $header = array(
+                "Authorization: Bearer $this->token",
+                "Content-Type" => "application/json"
+            );
+            $args = array(
+                'timeout' => 10000,
+                'headers' => $header,
+                'method' => 'POST',
+                'body' => wp_json_encode($data)
+            );
+            // Send remote request
+            $request = wp_remote_post(esc_url_raw($url), $args);
+
+            // Retrieve information
+            $response_code = wp_remote_retrieve_response_code($request);
+            $response_message = wp_remote_retrieve_response_message($request);
+            $result = json_decode(wp_remote_retrieve_body($request));
+            //print_r($result); die;
+            $return = new \stdClass();
+            if ((isset($result->error) && $result->error == '')) {
+                $return->data = $result->data;
                 $return->error = false;
                 return $return;
             } else {

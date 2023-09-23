@@ -17,7 +17,7 @@ export default {
 	 */
 	columns: {
 		type: 'number',
-		default: getSetting( 'default_columns', 3 ),
+		default: getSetting( 'defaultColumns', 3 ),
 	},
 
 	/**
@@ -25,7 +25,7 @@ export default {
 	 */
 	rows: {
 		type: 'number',
-		default: getSetting( 'default_rows', 3 ),
+		default: getSetting( 'defaultRows', 3 ),
 	},
 
 	/**
@@ -58,6 +58,7 @@ export default {
 	contentVisibility: {
 		type: 'object',
 		default: {
+			image: true,
 			title: true,
 			price: true,
 			rating: true,
@@ -71,5 +72,13 @@ export default {
 	isPreview: {
 		type: 'boolean',
 		default: false,
+	},
+
+	/**
+	 * Whether to display in stock, out of stock or backorder products.
+	 */
+	stockStatus: {
+		type: 'array',
+		default: Object.keys( getSetting( 'stockStatusOptions', [] ) ),
 	},
 };

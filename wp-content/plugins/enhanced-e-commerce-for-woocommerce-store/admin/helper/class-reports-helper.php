@@ -35,6 +35,7 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			add_action('wp_ajax_get_google_analytics_order_performance', array($this, 'get_google_analytics_order_performance'));
 			add_action('wp_ajax_generate_ai_response', array($this, 'generate_ai_response'));
 			add_action('wp_ajax_save_all_reports', array($this, 'save_all_reports'));
+			add_action('wp_ajax_get_ecomm_checkout_funnel', array($this, 'get_ecomm_checkout_funnel'));
 		}
 
 		public function req_int()
@@ -348,13 +349,17 @@ if (!class_exists('Conversios_Reports_Helper')) {
 				$start_date = sanitize_text_field($start_date);
 				$end_date = sanitize_text_field($end_date);
 				$api_rs = $this->ShoppingApi->accountPerformance_for_dashboard($start_date, $end_date);
-				if (isset($api_rs->error) && $api_rs->error == '') {
-					if (isset($api_rs->data) && $api_rs->data != "") {
+				if (isset($api_rs->error) && $api_rs->error == false) {
+					if (isset($api_rs->data) /*&& !empty($api_rs->data)*/ ) {
 						$return = array('error' => false, 'data' => $api_rs->data);
+					}else{ 
+						$data = array();
+						$return = array('error' => true, 'data' => $data);
 					}
 				} else {
-					$errormsg = isset($api_rs->errors->error) ? $api_rs->errors->message : "";
-					$return = array('error' => true, 'errors' => $errormsg, 'status' => $api_rs->status);
+					$errormsg = isset($api_rs->errors->message) ? $api_rs->errors->message : "";
+					$status = isset($api_rs->status) ? $api_rs->status : "";
+					$return = array('error' => true, 'errors' => $errormsg, 'status' => $status );
 				}
 			} else {
 				$return = array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store"));
@@ -418,6 +423,43 @@ if (!class_exists('Conversios_Reports_Helper')) {
 			}
 			echo json_encode($return);
 			wp_die();
+		}
+
+		public function get_ecomm_checkout_funnel()
+		{
+			$nonce = isset($_POST['conversios_nonce']) ? sanitize_text_field($_POST['conversios_nonce']) : "";
+			if ($this->admin_safe_ajax_call($nonce, 'conversios_nonce')) {
+				$domain = isset($_POST['domain']) ? sanitize_text_field($_POST['domain']) : "";
+				$start_date = str_replace(' ', '', (isset($_POST['start_date'])) ? sanitize_text_field($_POST['start_date']) : "");
+				if ($start_date != "") {
+					$date = DateTime::createFromFormat('d-m-Y', $start_date);
+					$start_date = $date->format('Y-m-d');
+				}
+				$start_date == (false !== strtotime($start_date)) ? date('Y-m-d', strtotime($start_date)) : date('Y-m-d', strtotime('-1 month'));
+
+				$end_date = str_replace(' ', '', (isset($_POST['end_date'])) ? sanitize_text_field($_POST['end_date']) : "");
+				if ($end_date != "") {
+					$date = DateTime::createFromFormat('d-m-Y', $end_date);
+					$end_date = $date->format('Y-m-d');
+				}
+				$end_date == (false !== strtotime($end_date)) ? date('Y-m-d', strtotime($end_date)) : date('Y-m-d', strtotime('now'));
+
+				$start_date = sanitize_text_field($start_date);
+				$end_date = sanitize_text_field($end_date);
+				$api_rs = $this->ShoppingApi->ecommerce_checkout_funnel($start_date, $end_date, $domain);
+				
+				if (isset($api_rs->error) && $api_rs->error == '') {
+					if (isset($api_rs->data) && $api_rs->data != "") {
+						echo json_encode(array('error' => false, 'data' => $api_rs->data));
+					}
+				} else {
+					$errormsg = isset($api_rs->errors[0]) ? $api_rs->errors[0] : "";
+					echo json_encode(array('error' => true, 'errors' => $errormsg,  'status' => $api_rs->status));
+				}
+			} else {
+				echo json_encode(array('error' => true, 'errors' => esc_html__("Admin security nonce is not verified.", "enhanced-e-commerce-for-woocommerce-store")));
+			}
+			wp_die();	
 		}
 	}
 }

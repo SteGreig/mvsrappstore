@@ -835,18 +835,17 @@ jQuery(document).ready(function() {
 <!--- dashboard ecommerce cahrt section start -->
 <div class="mt24 dshchrtwrp ecomfunnchart">
     <div class="row">
-        <?php //if ($this->plan_id != 1) { ?>
         <div class="col50">
             <div class="chartbx ecomfunnchrtbx ecom-funn-chrt-bx">
                 <div class="chartcntnbx">
-                    <h5><?php esc_html_e("Ecommerce Conversion Funnel", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                    <h5><?php esc_html_e("Ecommerce Conversion Funnel (# of Events)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </h5>
                     <div class="chartarea">
                         <canvas id="ecomfunchart" width="400" height="300"></canvas>
                     </div>
                     <hr>
                     <div class="ecomchartinfo">
-                        <div class="ecomchrtinfoflex">
+                        <div class="ecomchrtinfoflex custom-scrollbar">
                             <div class="ecomchartinfoitem">
                                 <div class="ecomchartinfolabel">
                                     <?php esc_html_e("Sessions", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
@@ -870,7 +869,7 @@ jQuery(document).ready(function() {
                                 <div class="chartpercarrow conversion_s4"></div>
                             </div>
                             <div class="ecomchartinfoitem">
-                                <div class="ecomchartinfolabel">
+                                <div class="ecomchartinfolabel ecomm_lastRecord">
                                     <?php esc_html_e("Order Confirmation", "enhanced-e-commerce-for-woocommerce-store"); ?>
                                 </div>
                             </div>
@@ -879,38 +878,79 @@ jQuery(document).ready(function() {
                 </div>
             </div>
         </div>
-        <?php /* } else { 
         <div class="col50">
-            <div class="chartbx ecomfunnchrtbx">
-                <div class="chartcntnbx prochrtftr">
-                    <h5><?php esc_html_e("Ecommerce Conversion Funnel", "enhanced-e-commerce-for-woocommerce-store"); ?>
+            <div class="chartbx ecomfunnchrtbx ecom-funn-chrt-bx checkoutfunnelga4">
+                <div class="chartcntnbx">
+                    <h5><?php esc_html_e("Ecommerce Checkout Funnel (# of Active Users)", "enhanced-e-commerce-for-woocommerce-store"); ?>
                     </h5>
                     <div class="chartarea">
-                        <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/ecom-chart.jpg'); ?>"
-                            alt="" />
+                        <canvas id="ecomcheckoutfunchart" width="400" height="300"></canvas>
                     </div>
-                </div>
-                <div class="prochrtovrbox">
-                    <div class="prochrtcntn">
-                        <div class="prochrttop">
-                            <img src="<?php echo esc_url_raw(ENHANCAD_PLUGIN_URL . '/admin/images/lock-orange.png'); ?>"
-                                alt="" />
-                            Locked
+                    <hr>
+                    <div class="ecomchartinfo">
+                        <div class="ecomchrtinfoflex custom-scrollbar">
+                            <div class="ecomchartinfoitem">
+                                <div class="ecomchartinfolabel">
+                                    <?php esc_html_e("View Cart", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div id="conversionRate_s1" class="chartpercarrow"></div>
+                            </div>
+                            <div class="ecomchartinfoitem">
+                                <div class="ecomchartinfolabel">
+                                    <?php esc_html_e("Begin Checkout", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </div>
+                                <div id="conversionRate_s2" class="chartpercarrow"></div>
+                            </div>
+                            <div class="ecomchartinfoitem">
+                                <div class="ecomchartinfolabel">
+                                    <?php esc_html_e("Add Shipping Info", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </div>
+                                <div id="conversionRate_s3" class="chartpercarrow"></div>
+                            </div>
+                            <div class="ecomchartinfoitem">
+                                <div class="ecomchartinfolabel">
+                                    <?php esc_html_e("Add Payment Info", "enhanced-e-commerce-for-woocommerce-store"); ?></div>
+                                <div id="conversionRate_s4" class="chartpercarrow"></div>
+                            </div>
+                            <div class="ecomchartinfoitem">
+                                <div class="ecomchartinfolabel ecomm_lastRecord">
+                                    <?php esc_html_e("Purchase", "enhanced-e-commerce-for-woocommerce-store"); ?>
+                                </div>
+                            </div>
                         </div>
-                        <h5 class="prochrtitle">
-                            <?php esc_html_e("Conversion Funnel", "enhanced-e-commerce-for-woocommerce-store"); ?></h5>
-                        <p><?php esc_html_e("This Report will help you visualize drop offs at each stage of your shopping funnel starting from home page to product page, cart page to checkout page and to final order confirmation page. Find out the major drop offs at each stage and take informed data driven decisions to increase the conversions and better marketing ROI.", "enhanced-e-commerce-for-woocommerce-store"); ?>
-                        </p>
-                        <a class="blueupgrdbtn" href="<?php echo esc_url_raw($this->pro_plan_site); ?>"
-                            target="_blank"><?php esc_html_e("Upgrade Now", "enhanced-e-commerce-for-woocommerce-store"); ?></a>
                     </div>
                 </div>
             </div>
         </div>
-        <?php }*/ ?>
     </div>
 </div>
 <!--- dashboard ecommerce cahrt section over -->
+
+<!--- Checkout funnel section start -->
+<div class="mt24 whiteroundedbx dshreport-sec">
+    <div class="row dsh-reprttop">
+        <div class="dshrprttp-left">
+            <h4><?php esc_html_e("Ecommerce Checkout Funnel Report", "enhanced-e-commerce-for-woocommerce-store"); ?></h4>
+        </div>
+    </div>
+    <div class="dashtablewrp checkout_funnel_report checkoutfunnelga4" id="checkout_funnel_report">
+        <table class="dshreporttble mbl-table">
+            <thead>
+                <tr>
+                    <th class="prdnm-cell"><?php esc_html_e("Step", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Event", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Active Users", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Conversion Rate from view_cart (%)", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Completion Rate (%)", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Drop-off (Users)", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                    <th><?php esc_html_e("Drop-off Rate (%)", "enhanced-e-commerce-for-woocommerce-store"); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--- Checkout funnel report section over -->
 <!--- Order Performance section start -->
 <div class="mt24 whiteroundedbx dshreport-sec">
     <div class="row dsh-reprttop">

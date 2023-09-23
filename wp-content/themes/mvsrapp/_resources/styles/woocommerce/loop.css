@@ -2,7 +2,7 @@
   @apply relative text-center;
 
   .button {
-    @apply mx-auto text-white bg-primary-dark;
+    @apply mx-auto text-white bg-highlight;
   }
 }
 

@@ -318,6 +318,10 @@ class WC_Stripe_Apple_Pay_Registration {
 			return;
 		}
 
+		if ( ! $this->is_available() ) {
+			return;
+		}
+
 		// Ensure that domain association file will be served.
 		flush_rewrite_rules();
 
@@ -408,9 +412,25 @@ class WC_Stripe_Apple_Pay_Registration {
 				<p><?php echo esc_html( $verification_failed_with_error ); ?></p>
 				<p><i><?php echo wp_kses( make_clickable( esc_html( $this->apple_pay_verify_notice ) ), $allowed_html ); ?></i></p>
 			<?php endif; ?>
-			<p><?php echo $check_log_text; ?></p>
+			<p><?php echo esc_html( $check_log_text ); ?></p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Returns whether Apple Pay can be registered.
+	 *
+	 * @since 7.6.0
+	 *
+	 * @return boolean
+	 */
+	private function is_available(): bool {
+		$cached_account_data = WC_Stripe::get_instance()->account->get_cached_account_data();
+		$account_country     = $cached_account_data['country'] ?? null;
+
+		// Stripe Elements doesn’t support Apple Pay for Stripe accounts in India.
+		// https://stripe.com/docs/stripe-js/elements/payment-request-button?client=html#html-js-testing
+		return 'IN' !== $account_country;
 	}
 }
 

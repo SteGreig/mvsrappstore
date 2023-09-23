@@ -32,7 +32,7 @@ class IntegrationRegistry {
 		}
 
 		if ( empty( $this->registry_identifier ) ) {
-			_doing_it_wrong( __METHOD__, esc_html( __( 'Integration registry requires an identifier.', 'woo-gutenberg-products-block' ) ) );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Integration registry requires an identifier.', 'woo-gutenberg-products-block' ), '4.6.0' );
 			return false;
 		}
 
@@ -42,6 +42,8 @@ class IntegrationRegistry {
 		 * Runs before integrations are initialized allowing new integration to be registered for use. This should be
 		 * used as the primary hook for integrations to include their scripts, styles, and other code extending the
 		 * blocks.
+		 *
+		 * @since 4.6.0
 		 *
 		 * @param IntegrationRegistry $this Instance of the IntegrationRegistry class which exposes the IntegrationRegistry::register() method.
 		 */
@@ -64,7 +66,7 @@ class IntegrationRegistry {
 
 		if ( $this->is_registered( $name ) ) {
 			/* translators: %s: Integration name. */
-			_doing_it_wrong( __METHOD__, esc_html( sprintf( __( '"%s" is already registered.', 'woo-gutenberg-products-block' ), $name ) ) );
+			_doing_it_wrong( __METHOD__, esc_html( sprintf( __( '"%s" is already registered.', 'woo-gutenberg-products-block' ), $name ) ), '4.6.0' );
 			return false;
 		}
 
@@ -95,7 +97,7 @@ class IntegrationRegistry {
 
 		if ( ! $this->is_registered( $name ) ) {
 			/* translators: %s: Integration name. */
-			_doing_it_wrong( __METHOD__, esc_html( sprintf( __( 'Integration "%s" is not registered.', 'woo-gutenberg-products-block' ), $name ) ) );
+			_doing_it_wrong( __METHOD__, esc_html( sprintf( __( 'Integration "%s" is not registered.', 'woo-gutenberg-products-block' ), $name ) ), '4.6.0' );
 			return false;
 		}
 

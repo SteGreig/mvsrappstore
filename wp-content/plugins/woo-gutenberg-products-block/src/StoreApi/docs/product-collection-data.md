@@ -17,8 +17,8 @@ GET /products/collection-data?calculate_rating_counts=true
 
 **In addition to the above attributes**, all product list attributes are supported. This allows you to get data for a certain subset of products. See [the products API list products section](products.md#list-products) for the full list.
 
-```http
-curl "https://example-store.com/wp-json/wc/store/products/collection-data?calculate_price_range=true&calculate_attribute_counts=pa_size,pa_color&calculate_rating_counts=true"
+```sh
+curl "https://example-store.com/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_attribute_counts=pa_size,pa_color&calculate_rating_counts=true"
 ```
 
 **Example response:**
@@ -29,6 +29,13 @@ curl "https://example-store.com/wp-json/wc/store/products/collection-data?calcul
 		"currency_minor_unit": 2,
 		"min_price": "0",
 		"max_price": "9000",
+		"currency_code": "USD",
+		"currency_decimal_separator": ".",
+		"currency_minor_unit": 2,
+		"currency_prefix": "$",
+		"currency_suffix": "",
+		"currency_symbol": "$",
+		"currency_thousand_separator": ",",
 	],
 	"attribute_counts": [
 		{
@@ -56,3 +63,14 @@ curl "https://example-store.com/wp-json/wc/store/products/collection-data?calcul
 	]
 }
 ```
+
+<!-- FEEDBACK -->
+
+---
+
+[We're hiring!](https://woocommerce.com/careers/) Come work with us!
+
+🐞 Found a mistake, or have a suggestion? [Leave feedback about this document here.](https://github.com/woocommerce/woocommerce-blocks/issues/new?assignees=&labels=type%3A+documentation&template=--doc-feedback.md&title=Feedback%20on%20./src/StoreApi/docs/product-collection-data.md)
+
+<!-- /FEEDBACK -->
+

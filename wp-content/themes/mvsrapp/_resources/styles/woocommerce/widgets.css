@@ -8,7 +8,7 @@
   }
   
   button {
-    @apply bg-primary ml-auto;
+    @apply bg-highlight ml-auto;
   }
 }
 

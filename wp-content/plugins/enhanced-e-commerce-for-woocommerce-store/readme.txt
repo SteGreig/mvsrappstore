@@ -6,10 +6,10 @@ Tags: facebook conversions api, google analytics 4, facebook pixel, google tag m
 Author URI: https://conversios.io/
 Author: Conversios
 Requires at least: 4.6
-Tested up to: 6.2.2
+Tested up to: 6.3.1
 Requires PHP: 5.6 or Higher
-Stable tag: 6.6.0
-Version: 6.6.0
+Stable tag: 6.6.1
+Version: 6.6.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -259,6 +259,10 @@ There could be duplicate tracking via manually implemented GA tracking snippet a
 
 
 == Changelog ==
+= 6.6.1 - 20/09/2023 =
+* Added Ecommerce checkout funnel reports for Google analytics 4.
+* Minor fixes and enhancements for Reports & Insights page.
+
 = 6.6.0 - 18/09/2023 =
 * We have added new feed channel for Tiktok catalog. Users can now sync WooCommerce products into Tiktok catalog to run product ads on Tiktok. Product feed along with the Tiktok pixel and Tiktok events API tracking features will help users scale thier campaigns on Tiktok Ad channel.
 

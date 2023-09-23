@@ -213,6 +213,34 @@ var tvc_helper = {
     }
     //}
   },
+  set_ecommerce_checkout_report_ga4: function (
+    data,
+    post_data
+  ) {
+    var table_row = "";
+    let funnelCounter=1;
+    let initial_value = 0;
+    if (data != undefined && Object.keys(data).length > 0) {
+      jQuery.each(data, function (propKey, propValue) {
+          if(propKey == "view_cart"){
+            initial_value = propValue?.activeUsers;
+          }
+          table_row += '<tr><td class="prdnm-cell">' + funnelCounter + "</td>";
+          table_row += '<td>' + propKey + "</td>";
+          table_row += '<td>' + propValue?.activeUsers || 0 + "</td>";
+          table_row += "<td>" + ((propValue?.activeUsers / initial_value)*100).toFixed(2) || 0 + "</td>";
+          table_row += "<td>" + propValue?.funnelStepCompletionRate.toFixed(2) || 0 + "</td>"; 
+          table_row += "<td>" + propValue?.funnelStepAbandonments || 0 + "</td>";
+          table_row += "<td>" + propValue?.funnelStepAbandonmentRate.toFixed(2) || 0 + "</td>"; 
+          funnelCounter++;  
+      });
+      jQuery("#checkout_funnel_report table tbody").append(table_row);
+    } else {
+      jQuery("#checkout_funnel_report table tbody").append(
+        "<tr><td colspan='7'>Data not available</td></tr>"
+      );
+    }
+  },
   set_google_ads_reports_campaign_performance_value: function (
     data,
     post_data
@@ -485,6 +513,36 @@ var tvc_helper = {
         v_this.remove_loader_for_analytics_reports();
       },
     });
+
+    //Ecommerce checkout funnel (GA4)
+    post_data["action"] = "get_ecomm_checkout_funnel";
+    var v_this = this;
+    jQuery("#checkout_funnel_report table tbody").html("");
+    jQuery('#checkout_funnel_report').addClass("is_loading");
+    jQuery.ajax({
+      type: "POST",
+      dataType: "json",
+      url: tvc_ajax_url,
+      data: post_data,
+      success: function (response) {
+        jQuery('#checkout_funnel_report').removeClass("is_loading");
+        if (response?.error == false) {
+          if (Object.keys(response?.data).length > 0) {
+            v_this.set_ecommerce_checkout_funnel_ga4(
+              response?.data,
+              post_data
+            );
+            v_this.set_ecommerce_checkout_report_ga4(response?.data,
+              post_data);
+          }
+        } else {  
+          if (response?.errors != "") {
+            v_this.tvc_alert("error","",response?.errors);
+          }
+        }
+      }
+    });
+
     //Order Performance (GA4)
     post_data["action"] = "get_google_analytics_order_performance";
     var v_this = this;
@@ -939,6 +997,117 @@ var tvc_helper = {
       },
     });
   },
+  set_ecommerce_checkout_funnel_ga4: function (response, post_data) {
+    var initial = response?.view_cart?.activeUsers;
+    var conversionRate_s1 = ((response?.begin_checkout?.activeUsers/initial)*100).toFixed(2);
+    jQuery("#conversionRate_s1").html(conversionRate_s1 + "%");
+    var conversionRate_s2 = ((response?.add_shipping_info?.activeUsers/initial)*100).toFixed(2);
+    jQuery("#conversionRate_s2").html(conversionRate_s2 + "%");
+    var conversionRate_s3 = ((response?.add_payment_info?.activeUsers/initial)*100).toFixed(2);
+    jQuery("#conversionRate_s3").html(conversionRate_s3 + "%");
+    var conversionRate_s4 = ((response?.purchase?.activeUsers/initial)*100).toFixed(2);
+    jQuery("#conversionRate_s4").html(conversionRate_s4 + "%");
+
+    checkout_funnel_chart = document
+      .getElementById("ecomcheckoutfunchart")
+      .getContext("2d");
+    var checkout_bluechartgradient =
+    checkout_funnel_chart.createLinearGradient(0, 0, 0, 800);
+    checkout_bluechartgradient.addColorStop(0, "#002BFC");
+    checkout_bluechartgradient.addColorStop(1, "#00CFF6");
+
+    checkout_bar_chart = new Chart(checkout_funnel_chart, {
+      type: "bar",
+      scaleSteps: 5,
+      data: {
+        labels: [
+          "View Cart",
+          "Begin Checkout",
+          "Add Shipping Info",
+          "Add Payment Info",
+          "Purchase",
+        ],
+        datasets: [
+          {
+            labels: false,
+            data: [
+              response?.view_cart?.activeUsers,
+              response?.begin_checkout?.activeUsers || 0,
+              response?.add_shipping_info?.activeUsers || 0,
+              response?.add_payment_info?.activeUsers || 0,
+              response?.purchase?.activeUsers || 0,
+            ],
+            backgroundColor: checkout_bluechartgradient,
+            hoverBackgroundColor: checkout_bluechartgradient,
+            hoverBorderWidth: 0,
+            hoverBorderColor: "blue",
+            datalabels: {
+              // formatter: (value, ctx) => {
+              //   let sum = 0;
+              //   let dataArr = ctx.chart.data.datasets[0].data;
+              //     dataArr.map(data => {
+              //         sum += data;
+              //     });
+              //     let percentage = (value*300 / sum).toFixed(0)+"%";
+              //     return percentage;
+              // },
+              color: "#515151",
+              anchor: "end",
+              align: "top",
+              offset: "10",
+            },
+          },
+        ],
+      },
+      plugins: [ChartDataLabels],
+      options: {
+        responsive: true,
+        plugins: {
+          legend: false,
+        },
+        scales: {
+          y: {
+            fontColor: "#ffffff",
+            fontStyle: "normal",
+            beginAtZero: true,
+            maxTicksLimit: 6,
+            padding: 0,
+            grid: {
+              borderWidth: 0,
+            },
+            ticks: {
+              stepSize: 1000,
+              callback: function (value) {
+                var ranges = [
+                  { divider: 1e6, suffix: "M" },
+                  { divider: 1e3, suffix: "k" },
+                ];
+                function formatNumber(n) {
+                  for (var i = 0; i < ranges.length; i++) {
+                    if (n >= ranges[i].divider) {
+                      return (
+                        (n / ranges[i].divider).toString() + ranges[i].suffix
+                      );
+                    }
+                  }
+                  return n;
+                }
+                return "" + formatNumber(value);
+              },
+            },
+          },
+          x: {
+            padding: 0,
+            fontColor: "#ffffff",
+            fontStyle: "normal",
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+  },
   display_field_val: function (
     div_id,
     field,
@@ -1022,13 +1191,13 @@ var tvc_helper = {
         //canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-    // canvas = document.getElementById("ecomcheckoutfunchart");
-    // if (canvas != null) {
-    //   var is_blank = this.is_canvas_blank(canvas);
-    //   if (!is_blank) {
-    //     checkout_bar_chart.destroy();
-    //   }
-    // }
+    canvas = document.getElementById("ecomcheckoutfunchart");
+    if (canvas != null) {
+      var is_blank = this.is_canvas_blank(canvas);
+      if (!is_blank) {
+        checkout_bar_chart.destroy();
+      }
+    }
 
     if (Object.keys(chart_ids).length > 0) {
       jQuery.each(chart_ids, function (propKey, propValue) {

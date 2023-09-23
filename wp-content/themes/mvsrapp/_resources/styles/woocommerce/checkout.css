@@ -69,5 +69,5 @@
 }
 
 .place-order button {
-  @apply bg-secondary font-bold;
+  @apply bg-highlight font-bold;
 }

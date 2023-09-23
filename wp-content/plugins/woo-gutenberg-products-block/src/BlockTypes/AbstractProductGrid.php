@@ -2,8 +2,8 @@
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
 use Automattic\WooCommerce\Blocks\Utils\BlocksWpQuery;
-use Automattic\WooCommerce\Blocks\StoreApi\SchemaController;
-use Automattic\WooCommerce\Blocks\Package;
+use Automattic\WooCommerce\StoreApi\SchemaController;
+use Automattic\WooCommerce\StoreApi\StoreApi;
 
 /**
  * AbstractProductGrid class.
@@ -32,6 +32,13 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	protected $query_args = array();
 
 	/**
+	 * Meta query args.
+	 *
+	 * @var array
+	 */
+	protected $meta_query = array();
+
+	/**
 	 * Get a set of attributes shared across most of the grid blocks.
 	 *
 	 * @return array List of block attributes with type and defaults.
@@ -50,17 +57,22 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'align'             => $this->get_schema_align(),
 			'alignButtons'      => $this->get_schema_boolean( false ),
 			'isPreview'         => $this->get_schema_boolean( false ),
+			'stockStatus'       => array(
+				'type'    => 'array',
+				'default' => array_keys( wc_get_product_stock_status_options() ),
+			),
 		);
 	}
 
 	/**
 	 * Include and render the dynamic block.
 	 *
-	 * @param array  $attributes Block attributes. Default empty array.
-	 * @param string $content    Block content. Default empty string.
+	 * @param array         $attributes Block attributes. Default empty array.
+	 * @param string        $content    Block content. Default empty string.
+	 * @param WP_Block|null $block      Block instance.
 	 * @return string Rendered block type output.
 	 */
-	protected function render( $attributes = array(), $content = '' ) {
+	protected function render( $attributes = array(), $content = '', $block = null ) {
 		$this->attributes = $this->parse_attributes( $attributes );
 		$this->content    = $content;
 		$this->query_args = $this->parse_query_args();
@@ -68,6 +80,15 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 
 		if ( ! $products ) {
 			return '';
+		}
+
+		/**
+		 * Override product description to prevent infinite loop.
+		 *
+		 * @see https://github.com/woocommerce/woocommerce-blocks/pull/6849
+		 */
+		foreach ( $products as $product ) {
+			$product->set_description( '' );
 		}
 
 		/**
@@ -90,7 +111,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 				rawurlencode(
 					wp_json_encode(
 						array_map(
-							[ Package::container()->get( SchemaController::class )->get( 'product' ), 'get_item_response' ],
+							[ StoreApi::container()->get( SchemaController::class )->get( 'product' ), 'get_item_response' ],
 							$products
 						)
 					)
@@ -120,6 +141,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		return array(
 			'type'       => 'object',
 			'properties' => array(
+				'image'  => $this->get_schema_boolean( true ),
 				'title'  => $this->get_schema_boolean( true ),
 				'price'  => $this->get_schema_boolean( true ),
 				'rating' => $this->get_schema_boolean( true ),
@@ -156,11 +178,13 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'categories'        => array(),
 			'catOperator'       => 'any',
 			'contentVisibility' => array(
+				'image'  => true,
 				'title'  => true,
 				'price'  => true,
 				'rating' => true,
 				'button' => true,
 			),
+			'stockStatus'       => array_keys( wc_get_product_stock_status_options() ),
 		);
 
 		return wp_parse_args( $attributes, $defaults );
@@ -172,6 +196,9 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return array
 	 */
 	protected function parse_query_args() {
+		// Store the original meta query.
+		$this->meta_query = WC()->query->get_meta_query();
+
 		$query_args = array(
 			'post_type'           => 'product',
 			'post_status'         => 'publish',
@@ -180,7 +207,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'no_found_rows'       => false,
 			'orderby'             => '',
 			'order'               => '',
-			'meta_query'          => WC()->query->get_meta_query(), // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_query'          => $this->meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery
 			'tax_query'           => array(), // phpcs:ignore WordPress.DB.SlowDBQuery
 			'posts_per_page'      => $this->get_products_limit(),
 		);
@@ -189,6 +216,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		$this->set_ordering_query_args( $query_args );
 		$this->set_categories_query_args( $query_args );
 		$this->set_visibility_query_args( $query_args );
+		$this->set_stock_status_query_args( $query_args );
 
 		return $query_args;
 	}
@@ -273,6 +301,30 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	}
 
 	/**
+	 * Set which stock status to use when displaying products.
+	 *
+	 * @param array $query_args Query args.
+	 * @return void
+	 */
+	protected function set_stock_status_query_args( &$query_args ) {
+		$stock_statuses = array_keys( wc_get_product_stock_status_options() );
+
+		// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		if ( isset( $this->attributes['stockStatus'] ) && $stock_statuses !== $this->attributes['stockStatus'] ) {
+			// Reset meta_query then update with our stock status.
+			$query_args['meta_query']   = $this->meta_query;
+			$query_args['meta_query'][] = array(
+				'key'     => '_stock_status',
+				'value'   => array_merge( [ '' ], $this->attributes['stockStatus'] ),
+				'compare' => 'IN',
+			);
+		} else {
+			$query_args['meta_query'] = $this->meta_query;
+		}
+		// phpcs:enable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+	}
+
+	/**
 	 * Works out the item limit based on rows and columns, or returns default.
 	 *
 	 * @return int
@@ -296,6 +348,8 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		 * @param boolean $is_cacheable The list of script dependencies.
 		 * @param array $query_args Query args for the products query passed to BlocksWpQuery.
 		 * @return array True to enable cache, false to disable cache.
+		 *
+		 * @since 2.5.0
 		 */
 		$is_cacheable      = (bool) apply_filters( 'woocommerce_blocks_product_grid_is_cacheable', true, $this->query_args );
 		$transient_version = \WC_Cache_Helper::get_transient_version( 'product_query' );
@@ -361,6 +415,11 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		$product_variations      = $wpdb->get_results( "SELECT ID as variation_id, post_parent as product_id from {$wpdb->posts} WHERE post_parent IN ( " . implode( ',', $prime_product_ids ) . ' )', ARRAY_A );
 		$prime_variation_ids     = array_column( $product_variations, 'variation_id' );
 		$variation_ids_by_parent = array_column( $product_variations, 'product_id', 'variation_id' );
+
+		if ( empty( $prime_variation_ids ) ) {
+			return;
+		}
+
 		$all_variation_meta_data = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT post_id as variation_id, meta_key as attribute_key, meta_value as attribute_value FROM {$wpdb->postmeta} WHERE post_id IN (" . implode( ',', array_map( 'esc_sql', $prime_variation_ids ) ) . ') AND meta_key LIKE %s',
@@ -368,7 +427,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			)
 		);
 		// phpcs:enable
-
 		// Prepare the data to cache by indexing by the parent product.
 		$primed_data = array_reduce(
 			$all_variation_meta_data,
@@ -448,15 +506,17 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		 * @param array $data Product data passed to the template.
 		 * @param \WC_Product $product Product object.
 		 * @return string Updated product grid item HTML.
+		 *
+		 * @since 2.2.0
 		 */
 		return apply_filters(
 			'woocommerce_blocks_product_grid_item_html',
 			"<li class=\"wc-block-grid__product\">
 				<a href=\"{$data->permalink}\" class=\"wc-block-grid__product-link\">
+					{$data->badge}
 					{$data->image}
 					{$data->title}
 				</a>
-				{$data->badge}
 				{$data->price}
 				{$data->rating}
 				{$data->button}
@@ -473,6 +533,9 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return string
 	 */
 	protected function get_image_html( $product ) {
+		if ( array_key_exists( 'image', $this->attributes['contentVisibility'] ) && false === $this->attributes['contentVisibility']['image'] ) {
+			return '';
+		}
 
 		$attr = array(
 			'alt' => '',
@@ -498,6 +561,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		if ( empty( $this->attributes['contentVisibility']['title'] ) ) {
 			return '';
 		}
+
 		return '<div class="wc-block-grid__product-title">' . wp_kses_post( $product->get_title() ) . '</div>';
 	}
 
@@ -512,7 +576,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			return '';
 		}
 		$rating_count = $product->get_rating_count();
-		$review_count = $product->get_review_count();
 		$average      = $product->get_average_rating();
 
 		if ( $rating_count > 0 ) {
@@ -587,7 +650,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'data-product_id'  => $product->get_id(),
 			'data-product_sku' => $product->get_sku(),
 			'rel'              => 'nofollow',
-			'class'            => 'wp-block-button__link add_to_cart_button',
+			'class'            => 'wp-block-button__link ' . ( function_exists( 'wc_wp_theme_get_element_class_name' ) ? wc_wp_theme_get_element_class_name( 'button' ) : '' ) . ' add_to_cart_button',
 		);
 
 		if (
@@ -615,11 +678,21 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 */
 	protected function enqueue_data( array $attributes = [] ) {
 		parent::enqueue_data( $attributes );
-		$this->asset_data_registry->add( 'min_columns', wc_get_theme_support( 'product_blocks::min_columns', 1 ), true );
-		$this->asset_data_registry->add( 'max_columns', wc_get_theme_support( 'product_blocks::max_columns', 6 ), true );
-		$this->asset_data_registry->add( 'default_columns', wc_get_theme_support( 'product_blocks::default_columns', 3 ), true );
-		$this->asset_data_registry->add( 'min_rows', wc_get_theme_support( 'product_blocks::min_rows', 1 ), true );
-		$this->asset_data_registry->add( 'max_rows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
-		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
+		$this->asset_data_registry->add( 'minColumns', wc_get_theme_support( 'product_blocks::min_columns', 1 ), true );
+		$this->asset_data_registry->add( 'maxColumns', wc_get_theme_support( 'product_blocks::max_columns', 6 ), true );
+		$this->asset_data_registry->add( 'defaultColumns', wc_get_theme_support( 'product_blocks::default_columns', 3 ), true );
+		$this->asset_data_registry->add( 'minRows', wc_get_theme_support( 'product_blocks::min_rows', 1 ), true );
+		$this->asset_data_registry->add( 'maxRows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
+		$this->asset_data_registry->add( 'defaultRows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
+	}
+
+	/**
+	 * Get the frontend style handle for this block type.
+	 *
+	 * @return string[]
+	 */
+	protected function get_block_type_style() {
+		// Currently these blocks rely on the styles from the All Products block.
+		return [ 'wc-blocks-style', 'wc-blocks-style-all-products' ];
 	}
 }

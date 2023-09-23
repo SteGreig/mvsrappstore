@@ -223,10 +223,11 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                 $row_count_super = $tvc_admin_db_helper->tvc_check_row('ee_product_feed', $where_super);
                 if($row_count_super == 0) {
             ?>
-            <div class="convcard d-flex flex-row mt-4 rounded-3 shadow-sm">  
-                <div id="loadingbar_blue_modal" class="progress-materializecss ps-2 pe-2 d-none" style="width:100%">
+            <div id="loadingbar_blue_modal" class="progress-materializecss ps-2 pe-2 d-none" style="width:100%; top:20px;">
                     <div class="indeterminate"></div>
                 </div>
+            <div class="convcard d-flex flex-row mt-4 rounded-3 shadow-sm">  
+                
                 <div class="convcard-center p-2 ps-3 col-10">
                 
                     <div class="convcard-title">
@@ -236,11 +237,11 @@ $conv_data = $TVC_Admin_Helper->get_store_data();
                     </div>
                 </div>
                 <div class="convcard-right d-flex" style="margin-top:13px;">
-                <?php $desc = empty($channel_not_connected['gmc_id']) === TRUE ? '<span class="text-danger">Google Merchant Center Required</span>' : ''; ?>
+                <?php $desc = !empty($channel_not_connected['gmc_id']) === TRUE ? '<span class="text-danger">Google Merchant Center Required</span>' : ''; ?>
                 <span class="float-end ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
                     title="<?php echo esc_attr($desc) ?>">
-                    <button class="btn btn-primary fs-12 <?php echo empty($channel_not_connected['gmc_id']) === TRUE ? "" : "createSuperAIFeed"; ?>" 
-                    <?php echo empty($channel_not_connected['gmc_id']) === TRUE ? "disabled" : ""; ?>>Sync Now</button>
+                    <button class="btn btn-primary fs-12 <?php echo !empty($channel_not_connected['gmc_id']) === TRUE ? "" : "createSuperAIFeed"; ?>" 
+                    <?php echo !empty($channel_not_connected['gmc_id']) === TRUE ? "disabled" : ""; ?>>Sync Now</button>
                 </span>
                 </div>
             </div>

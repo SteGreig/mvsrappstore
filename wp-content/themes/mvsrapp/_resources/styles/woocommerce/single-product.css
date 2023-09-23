@@ -109,7 +109,7 @@
 
 /* Notice that appears after product added to cart */
 .woocommerce-message {
-  @apply p-4 mb-4 text-sm font-bold text-center rounded-md bg-secondary md:mb-8 md:text-left;
+  @apply p-4 mb-4 text-sm font-bold text-center rounded-md bg-highlight md:mb-8 md:text-left;
 
   a {
     @apply block p-4 mb-2 text-center bg-white md:inline-block md:mr-8 md:mb-0;
@@ -126,7 +126,7 @@
   }
 
   button {
-    @apply mt-4 bg-secondary;
+    @apply mt-4 bg-highlight;
   }
 }
 
@@ -137,7 +137,7 @@
   @apply px-4 py-2 mx-2;
 
   &.active {
-    @apply font-bold rounded-t bg-secondary;
+    @apply font-bold rounded-t bg-highlight;
   }
 }
 
