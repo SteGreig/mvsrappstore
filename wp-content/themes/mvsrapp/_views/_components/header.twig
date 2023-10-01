@@ -1,16 +1,26 @@
-<header class="relative">
+<header class="relative overflow-hidden">
 
-	<div class="hero mx-auto w-full flex relative mt-16 md:mt-10 lg:mt-16 xl:mt-20 mb-12 sm:mb-16 xl:mb-28 2xl:mb-32" role="banner">
+	<div class="w-full bg-noir-400 flex justify-between items-center px-2">
+		<a class="p-2 inline-flex items-center text-sm" href="https://www.messivsronaldo.app/">
+			{{fn('icon','angle-left','mr-1')}}
+			<span>Main Site</span>
+		</a>
+		<div class="p-2">
+			<a href="https://twitter.com/mvsrapp">{{fn('icon','twitter','text-lg')}}</a>
+		</div>
+	</div>
+
+	<div class="hero mx-auto w-full flex relative mt-10 md:mt-10 lg:mt-16 mb-12 sm:mb-16 xl:mb-20" role="banner">
 		<picture class="hero__messi absolute bottom-0 left-0">
-			<source srcset="https://www.messivsronaldo.app/static/messi-19cf2d39858818ff945cdc071a0b59bd.png" media="(min-width: 1024px)">
-			<source srcset="https://www.messivsronaldo.app/static/messi-sm-28c09022bf0ac628781e7d9e990099ac.png" media="(min-width: 600px)">
-			<img src="https://www.messivsronaldo.app/static/messi-xs-40c0793cb8cac5482573063d25330448.png" alt="">
+			<source srcset="{{theme.link}}/_resources/images/messi.png" media="(min-width: 1024px)">
+			<source srcset="{{theme.link}}/_resources/images/messi-sm.png" media="(min-width: 600px)">
+			<img src="{{theme.link}}/_resources/images/messi-xs.png" alt="">
 		</picture>
 			
 		<picture class="hero__ronaldo absolute bottom-0 right-0">
-			<source srcset="https://www.messivsronaldo.app/static/ronaldo-b56ea019adabf21fc2c48d164a187cef.png" media="(min-width: 1024px)">
-			<source srcset="https://www.messivsronaldo.app/static/ronaldo-sm-8c3ad805cec98941bbcc8748501ca20b.png" media="(min-width: 600px)">
-			<img src="https://www.messivsronaldo.app/static/ronaldo-xs-340bf718cb9837248d3d1f52ba6e5e5b.png" alt="">
+			<source srcset="{{theme.link}}/_resources/images/ronaldo.png" media="(min-width: 1024px)">
+			<source srcset="{{theme.link}}/_resources/images/ronaldo.png" media="(min-width: 600px)">
+			<img src="{{theme.link}}/_resources/images/ronaldo-xs.png" alt="">
 		</picture>
 		
 		<a aria-current="page" class="logo inline-block mx-auto font-black text-3xl leading-none uppercase" href="/">

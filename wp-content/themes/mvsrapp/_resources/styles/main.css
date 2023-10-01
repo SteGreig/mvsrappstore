@@ -1,9 +1,8 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 
-@import "tailwindcss/utilities";
-
 @import "partials/core.css";
+@import "partials/header.css";
 @import "partials/buttons.css";
 @import "partials/cookies.css";
 @import "partials/desktop-nav.css";
@@ -13,7 +12,7 @@
 @import "woocommerce/single-product.css";
 @import "woocommerce/mini-cart.css";
 @import "woocommerce/reviews.css";
-@import "woocommerce/loop.css";
+@import "woocommerce/product-tile.css";
 @import "woocommerce/cart.css";
 @import "woocommerce/checkout.css";
 @import "woocommerce/pagination.css";
@@ -21,120 +20,4 @@
 @import "woocommerce/widgets.css";
 @import "woocommerce/grid.css";
 
-/* Extra Add On Content Normalize */
-@import "woocommerce/subscriptions.css";
-
-
-.hero {
-  max-width: 360px;
-
-  @screen sm {
-    max-width: 500px;
-  }
-
-  @screen md {
-    max-width: 580px;
-  }
-
-  @screen lg {
-    max-width: 700px;
-  }
-
-  @screen xl {
-    max-width: 840px;
-  }
-
-  @screen 2xl {
-    max-width: 960px;
-  }
-}
-
-.hero__messi {
-  width: 45%;
-  transform: translateX(-20%) translateY(30%);
-
-  @screen xl {
-    width: 48%;
-    transform: translateX(-20%) translateY(36%);
-  }
-}
-
-.hero__ronaldo {
-  width: 49%;
-  transform: translateX(20%) translateY(31%);
-
-  @screen xl {
-    width: 52%;
-    transform: translateX(20%) translateY(35%);
-  }
-
-  @screen 2xl {
-    transform: translateX(20%) translateY(37%);
-  }
-}
-
-.logo__messi-vs {
-  font-size: 1.875rem;
-}
-
-.logo__ronaldo {
-  font-size: 1.8rem;
-}
-
-.logo__app {
-  font-size: .75rem;
-}
-
-@screen sm {
-  .logo__messi-vs {
-    font-size: 2.8rem;
-  }
-
-  .logo__ronaldo {
-    font-size: 2.7rem;
-  }
-
-  .logo__app {
-    font-size: 1rem;
-  }
-}
-
-@screen md {
-  .logo__messi-vs {
-    font-size: 3.3rem;
-  }
-
-  .logo__ronaldo {
-    font-size: 3.2rem;
-  }
-}
-
-@screen lg {
-  .logo__messi-vs {
-    font-size: 3.7rem;
-  }
-
-  .logo__ronaldo {
-    font-size: 3.6rem;
-  }
-}
-
-@screen xl {
-  .logo__messi-vs {
-    font-size: 4rem;
-  }
-
-  .logo__ronaldo {
-    font-size: 3.9rem;
-  }
-}
-
-@screen 2xl {
-  .logo__messi-vs {
-    font-size: 4.6rem;
-  }
-
-  .logo__ronaldo {
-    font-size: 4.45rem;
-  }
-}
+@import "tailwindcss/utilities";

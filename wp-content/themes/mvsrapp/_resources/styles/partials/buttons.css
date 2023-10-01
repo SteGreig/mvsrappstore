@@ -5,5 +5,5 @@ input[type="button"],
 button,
 .btn,
 .button {
-  @apply px-4 py-2 transition duration-300 rounded bg-highlight hover:bg-highlight-400 text-noir uppercase font-semibold text-sm tracking-wide;
+  @apply px-4 py-2 transition duration-300 rounded bg-highlight hover:bg-highlight-300 text-noir uppercase font-semibold text-sm tracking-wide;
 }
