@@ -5,35 +5,36 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-6 md:mt-12 ">
 
-	<div class="p-6 xl:p-12 bg-noir-300">
-	
-	{# <div class="my-4 text-sm md:my-8">
-		{% do action('woocommerce_before_main_content') %}
-	</div> #}
+	<div class="md:p-6 xl:p-12 bg-noir-300">
 
-	{% do action('woocommerce_before_single_product') %}
+		{% do action('woocommerce_before_single_product') %}
 
-	<article itemscope itemtype="http://schema.org/Product" class="{{ post.class }}">
-		<div class="flex flex-wrap">
+		<article itemscope itemtype="http://schema.org/Product" class="{{ post.class }}">
+			<div class="flex flex-wrap">
 
-			<div class="relative w-full md:w-6/12 entry-images">
-				{% do action('woocommerce_before_single_product_summary') %}
+				<div class="relative w-full md:w-6/12 entry-images">
+					{% do action('woocommerce_before_single_product_summary') %}
+				</div>
+
+				<div class="flex flex-col items-start w-full md:w-6/12 p-8 md:py-0 lg:px-10 xl:px-16 xl:py-8 2xl:px-24">
+					{% do action('woocommerce_before_main_content') %}
+					{% do action('woocommerce_single_product_summary') %}
+				</div>
 			</div>
 
-			<div class="w-full md:w-6/12 md:px-8 lg:p-10 xl:p-12 mt-4 md:mt-0 copy">
-				{% do action('woocommerce_single_product_summary') %}
-			</div>
-		</div>
+			{# {% do action('woocommerce_after_single_product_summary') %} #}
 
-		{# {% do action('woocommerce_after_single_product_summary') %} #}
+			<meta itemprop="url" content="{{ post.link }}"/>
+		</article>
 
-		<meta itemprop="url" content="{{ post.link }}"/>
-	</article>
+		{# {% do action('woocommerce_after_single_product') %} #}
 
-	{# {% do action('woocommerce_after_single_product') %} #}
+	</div>
 
+	<div>
+		{% do action( 'woocommerce_output_product_data_tabs' ) %}
 	</div>
 
 </div>

@@ -131,3 +131,7 @@ add_action('wp_enqueue_scripts', function () {
         )
     );
 });
+
+
+// Remove SKU from product page
+add_filter( 'wc_product_sku_enabled', '__return_false' );

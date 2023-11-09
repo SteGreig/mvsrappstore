@@ -24,6 +24,6 @@ global $product;
 
 ?>
 
-<p class="mb-2 mt-5 <?= esc_attr(apply_filters('woocommerce_product_price_class', 'price')); ?>">
+<p class="mb-2 mt-5 <?= esc_attr(apply_filters('woocommerce_product_price_class', 'price-range')); ?>">
   <?= $product->get_price_html(); ?>
 </p>
