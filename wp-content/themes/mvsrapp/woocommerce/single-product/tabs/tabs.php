@@ -19,7 +19,9 @@
 if (!defined('ABSPATH')) {
   exit;
 }
-
+?>
+<p>test</p>
+<?php
 /**
  * Filter tabs and allow third parties to add their own.
  *

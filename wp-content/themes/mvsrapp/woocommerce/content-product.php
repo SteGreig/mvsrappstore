@@ -25,7 +25,7 @@ if (empty($product) || !$product->is_visible()) {
   return;
 }
 ?>
-<div <?php wc_product_class('column w-full md:w-6/12 lg:w-3/12', $product); ?>>
+<div <?php wc_product_class('column w-full', $product); ?>>
   <?php
   /**
    * Hook: woocommerce_before_shop_loop_item.
