@@ -5,17 +5,20 @@
 
 {% block content %}
 
-<div class="container my-8 lg:my-16">
+<div class="container px-4">
 
   <main class="w-full">
 
-    <article class="copy">
+    <div class="px-1 mb-5 lg:mb-8">
+      <h1 class="text-highlight font-semibold w-full text-center md:text-lg lg:text-xl xl:text-2xl">Cart</h1>
+    </div>
 
-      <h1>{{post.title}}</h1>
-
-      {{post.content}}
-
-    </article>
+    <div class="w-full max-w-screen-md mx-auto">
+      {% do action('woocommerce_before_shop_loop') %}
+      <div class="bg-noir-400 rounded-md">
+        {{post.content}}
+      </div>
+    </div>
 
   </main>
 

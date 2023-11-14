@@ -7,3 +7,11 @@ button,
 .button {
   @apply px-4 py-2 transition duration-300 rounded bg-highlight hover:bg-highlight-300 text-noir uppercase font-semibold text-sm tracking-wide;
 }
+
+.btn--noir {
+  @apply bg-noir-200 hover:bg-noir-100 text-white;
+}
+
+.btn-outline {
+  @apply bg-transparent hover:bg-transparent border-2 border-white hover:border-highlight text-white hover:text-highlight;
+}
