@@ -59,16 +59,3 @@ textarea::-moz-placeholder {
 textarea::placeholder {
     @apply text-gray-700;
 }
-
-input[type="button"],
-input[type="submit"] {
-    @apply
-    inline-block w-auto text-base font-semibold text-white bg-black cursor-pointer;
-    transition: .3s;
-    
-    &:hover {
-        @apply
-        bg-red-700;
-    }
-}
-
