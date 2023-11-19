@@ -135,3 +135,13 @@ add_action('wp_enqueue_scripts', function () {
 
 // Remove SKU from product page
 add_filter( 'wc_product_sku_enabled', '__return_false' );
+
+
+// add_filter( 'woocommerce_checkout_fields' , 'override_billing_checkout_fields', 20, 1 );
+
+// function override_billing_checkout_fields( $fields ) {
+//     $fields['billing']['billing_first_name']['placeholder'] = 'First Name *';
+//     $fields['billing']['billing_last_name']['placeholder'] = 'Last Name *';
+//     $fields['billing']['billing_city']['placeholder'] = 'Town / City *';
+//     return $fields;
+// }

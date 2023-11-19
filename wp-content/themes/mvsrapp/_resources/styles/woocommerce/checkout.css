@@ -1,7 +1,53 @@
-.billing-shipping {
+
+
+.woocommerce-form-coupon-toggle {
+  @apply mt-3 mb-4 text-sm opacity-60 hover:opacity-100 transition duration-300 font-semibold text-center;
+
+  a {
+    @apply font-normal;
+  }
+}
+
+.woocommerce-form-coupon {
+  @apply flex mb-5;
+
+  .input-text {
+    @apply w-7/12 rounded-r-none;
+  }
+
+  .button {
+    @apply w-5/12 rounded-l-none;
+  }
+}
+
+.select2-results__option {
+  color: #666;
+}
+
+.woocommerce-billing-fields,
+.shipping_address,
+.woocommerce-additional-fields {
+  @apply w-full p-6 sm:p-12 bg-noir-200 rounded-md text-sm;
+
+  h3 {
+    @apply w-full font-semibold text-2xl mb-4;
+  }
+
+  .woocommerce-billing-fields__field-wrapper,
+  .woocommerce-shipping-fields__field-wrapper {
+    @apply w-full flex justify-between flex-wrap;
+  }
+
+  .form-row {
+    @apply mb-4 last:mb-0 w-full;
+  }
+
+  .form-row:nth-of-type(-n+2) {
+    @apply sm:w-[49%];
+  }
+
   label {
-    @apply block;
-    @apply mb-2;
+    @apply block text-sm mb-[6px];
   }
 
   input:not([type='checkbox']),
@@ -10,10 +56,48 @@
     @apply block;
     @apply w-full;
   }
+}
+
+#billing_company_field {
+  @apply hidden;
+}
+
+#ship-to-different-address .woocommerce-form__label-for-checkbox {
+  @apply bg-noir-100 hover:bg-noir-50 transition duration-300 p-4 my-4 block rounded-md font-semibold cursor-pointer;
+}
+
+#ship-to-different-address-checkbox {
+  @apply w-auto mr-2;
+}
+
+.shipping_address {
+  @apply mb-4;
+}
+
+.woocommerce-additional-fields {
+  @apply sm:pt-7 sm:pb-8;
 
   .form-row {
-    @apply mb-4;
+    width: 100% !important;
   }
+  
+  label {
+    @apply text-base mb-4;
+  }
+}
+
+
+/* Your Order section */
+.checkout-order-section {
+  @apply w-full bg-noir-400 border-2 border-noir-200 mt-4 rounded-md p-4 md:p-8;
+}
+
+#order_review_heading {
+  @apply w-full font-semibold text-2xl mb-4;
+}
+
+#place_order {
+  @apply text-base w-full mt-5 py-3 flex text-center justify-center;
 }
 
 .woocommerce-table--order-downloads,
@@ -21,23 +105,34 @@
 .woocommerce-checkout-review-order-table {
   @apply w-full;
 
-  td,
-  th {
-    @apply py-1;
+  td:first-child,
+  th:first-child {
+    @apply text-left;
   }
 
-  thead tr,
-  tfoot tr,
-  tbody tr:last-child {
-    @apply border-b;
+  td,
+  th {
+    @apply py-2 text-right;
+  }
+
+  tbody .product-name {
+    @apply text-sm;
+  }
+
+  tr {
+    @apply border-b border-white border-opacity-30;
+  }
+
+  .order-total {
+    @apply text-highlight;
   }
 }
 
 .wc_payment_method {
-  @apply pb-2 mb-2 border-b;
+  @apply p-4 bg-noir-300 hover:bg-noir-200 transition duration-300 cursor-pointer rounded-md mb-3;
 
   label {
-    @apply flex-grow flex justify-between items-center;
+    @apply flex-grow flex justify-between items-center font-semibold cursor-pointer;
 
     span {
       @apply block;
@@ -59,13 +154,17 @@
     @apply hidden;
   }
 
+  .payment_box {
+    @apply mt-2;
+  }
+
   .payment_box p {
     @apply text-sm;
   }
 }
 
 .woocommerce-privacy-policy-text p {
-  @apply my-3 text-sm;
+  @apply my-3 text-sm opacity-50;
 }
 
 .place-order button {

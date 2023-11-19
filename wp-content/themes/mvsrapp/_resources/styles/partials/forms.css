@@ -5,11 +5,16 @@ input,
 textarea,
 select {
     @apply
-    w-full px-4 py-3 text-sm text-gray-900 bg-white border border-gray-300 border-solid sm:px-6;
+    w-full px-4 py-2 rounded text-sm text-gray-900 bg-white;
 
     &[aria-invalid="true"] {
         background-color: #f3e2e2;
     }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    @apply w-auto mr-2;
 }
 
 select {

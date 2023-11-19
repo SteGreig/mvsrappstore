@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
   <div class="flex items-center">
     <input id="payment_method_<?php echo esc_attr($gateway->id); ?>" type="radio" class="input-radio mr-3" name="payment_method" value="<?php echo esc_attr($gateway->id); ?>" <?php checked($gateway->chosen, true); ?> data-order_button_text="<?php echo esc_attr($gateway->order_button_text); ?>" />
 
-    <label class="w-full" for="payment_method_<?php echo esc_attr($gateway->id); ?>">
+    <label class="payment-method-label" for="payment_method_<?php echo esc_attr($gateway->id); ?>">
       <span><?php echo $gateway->get_title(); ?></span>
       <span class="flex-grow icons"><?php echo $gateway->get_icon(); ?></span>
     </label>

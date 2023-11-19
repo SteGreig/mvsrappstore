@@ -85,11 +85,23 @@
   }
 
   .shipping-calculator-button {
-    @apply bg-noir px-8 py-2 inline-flex rounded-md uppercase tracking-wide mt-3 text-sm font-semibold;
+    @apply bg-noir hover:bg-noir-400 px-8 py-2 inline-flex rounded-md uppercase tracking-wide mt-3 text-sm font-semibold;
   }
 
   .shipping-calculator-form {
     @apply max-w-screen-2xs ml-auto mt-4;
+  }
+
+  .shipping-calculator-form .form-row {
+    @apply mb-1;
+  }
+
+  .shipping-calculator-form #calc_shipping_country_field {
+    @apply mb-2;
+  }
+
+  .shipping-calculator-form .button {
+    @apply mt-2;
   }
 
   .checkout-button {
@@ -124,10 +136,22 @@
   @apply w-full mt-4 md:mt-0 md:ml-4 cursor-pointer;
 }
 
-.cart-empty {
-  @apply p-10 text-center;
+.wc-empty-cart-message {
+  @apply px-10 pt-10 text-center;
+
+  .cart-empty {
+    @apply mb-0 text-center;
+  }
+}
+
+.wc-empty-cart-message:empty {
+  @apply p-0;
+}
+
+.cart-empty.woocommerce-info {
+  @apply text-center mb-4;
 }
 
 .return-to-shop {
-  @apply px-10 pb-10 flex justify-center;
+  @apply p-10 flex justify-center;
 }
