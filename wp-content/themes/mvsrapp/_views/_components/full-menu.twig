@@ -14,7 +14,7 @@
     <ul>
       {% for item in product_cats %}
         <li class="block">
-          <a class="block py-1 hover:text-highlight" href="/product-category/{{item.slug}}/">{{item.name}}</a>
+          <a class="block py-1 text-gray-400 hover:text-highlight" href="/product-category/{{item.slug}}/">{{item.name}}</a>
         </li>
       {% endfor %}
     </ul>
@@ -23,7 +23,7 @@
     <ul>
       {% for item in footerMenu.items %}
         <li class="{{item.class}} block">
-          <a class="block py-1 hover:text-highlight" href="{{item.url}}">{{item.name}}</a>
+          <a class="block py-1 text-gray-400 hover:text-highlight" href="{{item.url}}">{{item.name}}</a>
         </li>
       {% endfor %}
     </ul>

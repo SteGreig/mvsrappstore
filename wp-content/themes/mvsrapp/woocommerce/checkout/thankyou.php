@@ -19,7 +19,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="woocommerce-order">
+<div class="woocommerce-order woocommerce-thankyou">
   <?php
   if ($order) :
     do_action('woocommerce_before_thankyou', $order->get_id());
