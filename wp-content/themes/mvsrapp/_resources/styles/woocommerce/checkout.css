@@ -190,7 +190,9 @@
 }
 
 .woocommerce-thankyou .woocommerce-order-details {
+  @apply mt-8;
+
   h2 {
-    @apply text-2xl;
+    @apply text-2xl font-semibold mb-3;
   }
 }
