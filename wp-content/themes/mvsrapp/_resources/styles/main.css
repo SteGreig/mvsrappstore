@@ -30,3 +30,19 @@
 .woocommerce-breadcrumb a {
   @apply text-highlight hover:underline;
 }
+
+.full-menu.active {
+  @apply translate-x-0 shadow-2xl;
+}
+
+.menu-underlay.active {
+  @apply opacity-100 pointer-events-auto;
+}
+
+.hide-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.hide-scrollbars::-webkit-scrollbar { /* WebKit */
+  @apply hidden;
+}

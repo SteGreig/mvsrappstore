@@ -12,7 +12,7 @@
 	</div> #}
 
 	<div class="before-shop-loop px-1 mb-5 lg:mb-8">
-		<h1 class="text-highlight font-semibold w-full text-center md:text-lg lg:text-xl xl:text-2xl">Messi & Ronaldo Wall Art</h1>
+		<h1 class="text-highlight font-semibold w-full text-center md:text-lg lg:text-xl xl:text-2xl">{{ is_front_page ? 'Messi & Ronaldo' : title}} Wall Art</h1>
 		{% do action('woocommerce_before_shop_loop') %}
 	</div>
 

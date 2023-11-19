@@ -62,6 +62,12 @@ class BaseSite extends Timber\Site
 
         global $woocommerce;
         $context['cart_count'] = $woocommerce->cart->cart_contents_count;
+
+        $productCats = Timber::get_terms('product_cat', array('hide_empty' => 1));
+
+        $context['product_cats'] = $productCats;
+
+        $context['is_front_page'] = is_front_page();
         
         return $context;
     }

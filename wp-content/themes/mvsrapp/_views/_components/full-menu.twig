@@ -1,0 +1,50 @@
+
+<div class="full-menu w-11/12 max-w-screen-2xs fixed top-0 left-0 bottom-0 h-full z-50 bg-noir-300 -translate-x-full transition-all duration-300">
+
+  <div class="px-2 py-4 border-b border-white border-opacity-30 items-center flex">
+    <button aria-label="Close Menu" class="close-menu btn btn-outline--white btn--no-arrow">
+      {{fn('icon','times','text-xl mr-2')}}
+      <span>Close</span>
+    </button>
+  </div>
+
+  <div class="overflow-y-auto hide-scrollbars p-8">
+
+    <h5 class="font-semibold mb-2">Categories</h5>
+    <ul>
+      {% for item in product_cats %}
+        <li class="block">
+          <a class="block py-1 hover:text-highlight" href="/product-category/{{item.slug}}/">{{item.name}}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h5 class="font-semibold mb-2 mt-6">Information</h5>
+    <ul>
+      {% for item in footerMenu.items %}
+        <li class="{{item.class}} block">
+          <a class="block py-1 hover:text-highlight" href="{{item.url}}">{{item.name}}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="flex flex-start mt-6">
+      <a class="rounded-full border-2 border-highlight group relative flex items-center p-2 text-base " href="/cart/">
+        {{fn('icon','shopping-cart','text-xl mr-2 group-hover:text-highlight transition duration-300')}}
+        <span class="mr-2">Cart</span>
+        <span class="w-5 h-5 bg-highlight rounded-full p-1 leading-none text-sm text-noir inline-flex justify-center items-center font-semibold">{{cart_count}}</span>
+      </a>
+    </div>
+
+    <a class="flex items-center hover:text-highlight mt-16" href="https://twitter.com/mvsrapp">
+      {{fn('icon','twitter','text-lg mr-2')}}
+      <span>Twitter</span>
+    </a>
+
+    <a class="inline-block btn btn-outline mt-6" href="https://www.messivsronaldo.app/">Main Stats Site</a>
+
+  </div>
+
+</div>
+
+<div class="menu-underlay w-full h-full z-[49] bg-black bg-opacity-90 fixed top-0 left-0 opacity-0 pointer-events-none transition-all duration-300"></div>

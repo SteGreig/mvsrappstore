@@ -27,7 +27,7 @@
 .woocommerce-billing-fields,
 .shipping_address,
 .woocommerce-additional-fields {
-  @apply w-full p-6 sm:p-12 bg-noir-200 rounded-md text-sm;
+  @apply w-full p-6 sm:p-12 bg-noir-300 rounded-md text-sm;
 
   h3 {
     @apply w-full font-semibold text-2xl mb-4;
@@ -63,7 +63,7 @@
 }
 
 #ship-to-different-address .woocommerce-form__label-for-checkbox {
-  @apply bg-noir-100 hover:bg-noir-50 transition duration-300 p-4 my-4 block rounded-md font-semibold cursor-pointer;
+  @apply bg-noir-200 hover:bg-noir-100 transition duration-300 p-4 my-4 block rounded-md font-semibold cursor-pointer;
 }
 
 #ship-to-different-address-checkbox {
@@ -128,6 +128,10 @@
   }
 }
 
+.shop_table.woocommerce-checkout-review-order-table {
+  @apply mb-6;
+}
+
 .wc_payment_method {
   @apply p-4 bg-noir-300 hover:bg-noir-200 transition duration-300 cursor-pointer rounded-md mb-3;
 
@@ -169,4 +173,8 @@
 
 .place-order button {
   @apply bg-highlight font-bold;
+}
+
+#wcpay-payment-request-button-separator {
+  @apply hidden;
 }
