@@ -105,7 +105,7 @@
 
 .single-cart,
 .variations_form {
-  @apply mt-8 w-full mb-12;
+  @apply mt-8 w-full;
 
   label {
     @apply my-2;

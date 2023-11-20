@@ -16,6 +16,16 @@
 		});
 
 
+		$('.size-guide-trigger').click(function(e) {
+			e.preventDefault();
+			$('.size-guide').addClass('active');
+		});
+
+		$('.close-size-guide').click(function(e) {
+			e.preventDefault();
+			$('.size-guide').removeClass('active');
+		});
+
 	});
 
 }(jQuery));
