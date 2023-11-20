@@ -178,3 +178,21 @@
 #wcpay-payment-request-button-separator {
   @apply hidden;
 }
+
+
+/* Thank You page */
+.woocommerce-thankyou {
+  @apply bg-noir-400 rounded-md p-4 md:p-8;
+}
+
+.woocommerce-notice--success.woocommerce-thankyou-order-received {
+  @apply font-semibold text-xl text-highlight mb-8;
+}
+
+.woocommerce-thankyou .woocommerce-order-details {
+  @apply mt-8;
+
+  h2 {
+    @apply text-2xl font-semibold mb-3;
+  }
+}

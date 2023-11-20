@@ -19,7 +19,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="woocommerce-order">
+<div class="woocommerce-order woocommerce-thankyou">
   <?php
   if ($order) :
     do_action('woocommerce_before_thankyou', $order->get_id());
@@ -38,7 +38,7 @@ defined('ABSPATH') || exit;
 
     <?php else : ?>
 
-      <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters('woocommerce_thankyou_order_received_text', esc_html__('Thank you. Your order has been received.', 'woocommerce'), $order); ?></p>
+      <p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><?php echo apply_filters('woocommerce_thankyou_order_received_text', esc_html__('Thank you! Your order has been received.', 'woocommerce'), $order); ?></p>
 
       <ul class="my-3 woocommerce-order-overview woocommerce-thankyou-order-details order_details">
 
